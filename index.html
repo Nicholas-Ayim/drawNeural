@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width,
+        maximum-scale=0.9,user-scalable=0">
+        <meta charset="UTF-8">
+        <title>NEURAL NETWORK</title>
+        <link rel="styleSheet" href="index.css"/>
+    </head>
+    <body>
+        <div id="content">
+            <h1>Data creator</h1>
+            <div>
+                <input id="student" type="text" placeholder="enter your name"/>
+                <span id="instructions"></span>
+                <button id="advanceBtn" onclick="start();">START</button>
+            </div>
+            <br>
+            <div id="sketchPadContainer"
+            style="visibility: hidden;"></div>
+
+        </div>
+        <script src="js/draw.js"></script>
+        <script src="js/sketchpad.js"></script>
+
+        <!-- pre load the js file before calling the html -->
+        
+         <script>
+                        // Ensure the script is executed after the sketchpad.js file is loaded
+                 const sketchPadContainer = document.getElementById("sketchPadContainer");
+                const sketchPad = new SketchPad(sketchPadContainer); // assuming 'SketchPad' is the correct class name
+                
+        let index = 0;
+        const labels = ["man","pen","book","car","tree","bicycle"]
+
+        const data = {
+                student:null,
+                session:new Date().getTime(),
+                drawings:{}
+            };
+            function start(){
+                if(student.value === ""){
+                    alert("please type name ")
+                    return
+                }
+                data.student = student.value;
+                student.style.display = "none";
+                sketchPadContainer.style.visibility="visible"
+                const label = labels[index]
+                instructions.innerHTML = "please draw a " + label
+                advanceBtn.innerHTML = "NEXT",
+                advanceBtn.onclick = next
+            }
+            function  next(){
+
+                if(sketchPad.paths.length === 0){
+                    alert("draw something first!!")
+                    return;
+                }
+                const label = labels[index]
+                data.drawings[label] = sketchPad.paths
+                sketchPad.reset()
+                index++;
+                if(index < labels.length){
+                 const nextLabel = labels[index]
+                // const instructions = document.getElementById("instructions")
+                instructions.innerHTML = "please draw a " +nextLabel
+                }else{
+                    sketchPadContainer.style.visibility = "hidden";
+                    instructions.innerHTML = "Thank you";
+                    advanceBtn.innerHTML = "SAVE";
+                    advanceBtn.onclick=save
+                }
+                
+
+            }
+            function save(){
+                advanceBtn.style.display = "none";
+                instructions.innerHTML = "your download is ready for training and testing"
+
+                //create a download
+                const downloadElement= document.createElement("a");
+                downloadElement.setAttribute("href",
+                "data:text/plain;charset=utf-8," + encodeURIComponent(JSON.stringify(data))
+                );
+                const fileName = data.session + ".json";
+                downloadElement.setAttribute("download",fileName);
+
+                downloadElement.style.display = "none";
+                document.body.appendChild(downloadElement)
+                downloadElement.click()
+                document.body.removeChild(downloadElement)
+                console.log(downloadElement)
+            }
+          
+            
+        </script> 
+    </body>
+</html>
