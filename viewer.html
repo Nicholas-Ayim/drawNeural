@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width,
+        maximum-scale=0.9,user-scalable=0">
+        <meta charset="UTF-8">
+        <title>VIEW DATA</title>
+        <link rel="styleSheet" href="index.css"/>
+    </head>
+    <body>
+        <h1>Data viewer</h1>
+        <div id="container"></div>
+        <script src="./common/js_objects/samples.js"></script>
+        <script src="./common/constants.js"></script>
+        <script src="./utils.js"></script>
+        <script src="js/display.js"></script>
+        <script>
+            // console.log(samples)
+            const groups = utils.groupBy(samples,"student_id")
+            // console.log(groups)
+            for(let student_id in groups){
+                const samples = groups[student_id]
+                console.log(samples)
+                const studentName = samples[0].student_name;
+                createRow(container,studentName,samples)
+            }
+        </script>
+    </body>
+
+</html>
